@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Best Cinema Seat</title>
+<style>
+  :root{--blue:#1F5FAD;--s1:#4472C4;--grey:#A6A6A6;--ink:#000;--muted:#595959;--rule:#BFBFBF}
+  html,body{margin:0;background:#E9E9E9;color:#000;font-family:Arial,Helvetica,sans-serif}
+  .wrap{max-width:760px;margin:0 auto;padding:24px 16px 48px}
+  .cover{background:#fff;padding:26px 28px;margin-bottom:18px;border-top:6px solid var(--blue)}
+  .cover h1{font-size:24px;font-weight:700;margin:0 0 6px;color:var(--blue)}
+  .cover p{margin:0;font-size:14px;line-height:1.5}
+  .part{font-size:13px;color:#595959;margin:26px 0 10px;font-weight:700;letter-spacing:.02em}
+  .part span{color:#fff;background:#1F5FAD;padding:2px 8px;margin-right:8px;border-radius:2px}
+  .page{background:#fff;padding:22px 26px 16px;margin-bottom:18px}
+  .ft{color:var(--blue);font-size:16px;font-weight:700;line-height:1.3}
+  .fs{font-size:12px;margin:3px 0 8px}
+  .src{font-size:11px;color:var(--muted);margin-top:8px;border-top:0.75px solid var(--rule);padding-top:6px}
+  .bul{font-family:"Times New Roman",Times,serif;font-size:15px;line-height:1.5;margin:12px 0 0;padding-left:20px}
+  .bul li{margin-bottom:6px}
+  .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+  .ft2{color:var(--blue);font-size:15px;font-weight:700}
+  .fs2{font-size:11px;line-height:1.45;margin-top:3px}
+  svg{display:block;width:100%;height:auto}
+  .btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .btns button{border:0.75px solid #BFBFBF;background:#fff;color:#000;font-size:12px;padding:5px 10px;border-radius:3px;cursor:pointer;font-family:inherit}
+  .btns button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1.5px solid #000;border-bottom:0.75px solid #000;margin:4px 0 10px}
+  .kpi div{padding:8px 4px}.kpi .l{font-size:11px;color:var(--muted)}.kpi .v{font-size:22px;font-weight:700}
+  .lg{display:flex;flex-wrap:wrap;gap:16px;font-size:11px;margin-top:8px}.lg span{display:flex;align-items:center;gap:5px}.lg i{display:inline-block;width:10px;height:10px}
+  table.mx{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}
+  table.mx th{font-weight:700;padding:6px 2px;line-height:1.25;vertical-align:bottom;text-align:center}
+  table.mx td{padding:2px}
+  .row{display:flex;align-items:center;gap:12px;margin:8px 0}
+  input[type=range]{flex:1;accent-color:#1F5FAD}
+  .ctl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 18px;margin:4px 0 10px;font-size:12px}
+  .ctl label{display:flex;align-items:center;gap:8px}.ctl label b{min-width:52px;text-align:right;font-weight:700}
+  .ctl input[type=range]{flex:1;min-width:60px}.ctl .chk input{accent-color:#1F5FAD}
+  .kpi.k5{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .gl{font-size:12px;font-weight:700;margin:10px 0 5px}
+  .prow{display:grid;grid-template-columns:120px minmax(0,1fr) 150px 72px 28px;gap:8px;align-items:center;padding:5px 0;border-bottom:0.5px solid #E4E4E4;font-size:12px}
+  .prow input[type=text],.prow select{font:inherit;font-size:12px;padding:4px 6px;border:0.75px solid #BFBFBF;border-radius:3px;background:#fff;color:#000;min-width:0}
+  .prow .ph{display:flex;align-items:center;gap:6px}.prow .ph input{flex:1;min-width:40px}.prow .ph b{min-width:46px;text-align:right}
+  .prow .rm{border:0.75px solid #BFBFBF;background:#fff;border-radius:3px;cursor:pointer;font-size:14px;line-height:1;padding:3px 0;color:#595959}
+  .prow .rm:hover{color:#C00000;border-color:#C00000}
+  .why{font-family:"Times New Roman",Times,serif;font-size:15px;line-height:1.5;border-left:3px solid #1F5FAD;padding:4px 0 4px 12px;margin:4px 0 12px}
+  @media (max-width:560px){.prow{grid-template-columns:minmax(0,1fr) auto 32px}.prow>input[type=text]{grid-column:1/3;grid-row:1}.prow .rm{grid-column:3;grid-row:1}.prow .ph{grid-column:1/-1;grid-row:2}.prow select{grid-column:1;grid-row:3}.prow .chk{grid-column:2/-1;grid-row:3}.ctl{grid-template-columns:1fr}.kpi.k5{grid-template-columns:repeat(3,minmax(0,1fr))}.two:not(.keep){grid-template-columns:1fr}.kpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="cover">
+  <h1>Where to sit: the maths of the best cinema seat</h1>
+  <p>After watching <i>Spider-Man: No Way Home</i>, one question stuck with me: which seat makes the screen look biggest? This report answers it in four steps: a textbook cinema, real Australian cinemas, viewers with different heights and eyesight, and finally a group where everyone is different.</p>
+</div>
+
+<div class="part"><span>Part 1</span>The textbook cinema</div>
+
+<!-- FIGURE 1: explorer -->
+<div class="page">
+  <div class="ft">Figure 1: Drag the viewer up the slope and watch the viewing angle change</div>
+  <div class="fs">Textbook cinema: screen 4–14 m above the floor, front row 3 m from the wall, floor rising at 30°, eyes 1 m above the seat.</div>
+  <div class="kpi"><div><div class="l">Distance from front row</div><div class="v" id="e_x">0.0 m</div></div><div><div class="l">Viewing angle θ</div><div class="v" id="e_t">32.0°</div></div><div><div class="l">Neck tilt β</div><div class="v" id="e_b">77.0°</div></div><div><div class="l">Verdict</div><div class="v" id="e_v" style="font-size:18px;padding-top:4px">Too close</div></div></div>
+  <svg id="e_scene" viewBox="0 0 680 500"></svg>
+  <div class="row"><input type="range" id="e_sl" min="0" max="16" step="0.01" value="0" aria-label="Distance from front row"><div class="btns" style="margin:0"><button id="e_go" class="on">Find the best seat</button></div></div>
+  <svg id="e_curve" viewBox="0 0 680 230"></svg>
+  <div class="src">Source: own calculations.</div>
+</div>
+
+<!-- FIGURE 2: geometry -->
+<div class="page">
+  <div class="ft">Figure 2: Putting the cinema on coordinates</div>
+  <div class="fs">The origin O is at the foot of the screen. The eye M(a, b) is 1 m above seat C, and x is the distance DC along the floor. Both α and β are measured from the horizontal line MK.</div>
+  <svg id="geo" viewBox="0 0 680 520"></svg>
+  <div class="src">Source: own calculations.</div>
+  <ul class="bul">
+    <li>DH = x·cos 30° = (√3/2)x and HC = x·sin 30° = x/2, so a = 3 + (√3/2)x and b = x/2 + 1.</li>
+    <li>tan β = (14 − b)/a and tan α = (4 − b)/a. Since θ = β − α, the tan subtraction formula gives tan θ = f(x) = (5√3x + 30) / (x² + (3√3 − 8)x + 48).</li>
+  </ul>
+</div>
+
+<!-- FIGURE 3: theta beta alpha -->
+<div class="page">
+  <div class="ft">Figure 3: Viewing angle by seat position, and its two sight lines</div>
+  <div class="fs">In degrees. x = distance from the front row along the 30° floor, in metres.</div>
+  <svg id="f3" viewBox="0 0 680 360"></svg>
+  <div class="src">Source: own calculations.</div>
+  <ul class="bul"><li>As you move back, β falls slowly and α falls faster, so the gap between them, θ, first widens and then narrows. The peak is 51.2° at 4.89 m.</li></ul>
+</div>
+
+<!-- FIGURE 4: marginal -->
+<div class="page">
+  <div class="ft">Figure 4: Change in viewing angle from moving back one more step</div>
+  <div class="fs">In degrees per extra 0.5 m along the slope. The bars have the same sign as f′(x).</div>
+  <svg id="f4" viewBox="0 0 680 300"></svg>
+  <div class="src">Source: own calculations.</div>
+  <ul class="bul"><li>The bars switch from blue to black where f′(x) = 0. Solving √3x² + 12x − 30√3 − 48 = 0 gives x ≈ 4.89 m. Because f′(x) changes from positive to negative there, this point is a maximum.</li></ul>
+</div>
+
+<!-- FIGURE 5 -->
+<div class="page">
+  <div class="two keep">
+    <div><div class="ft2">Figure 5a: Seat monitor</div><div class="fs2">Sight-line angles in degrees. A bigger θ means a bigger screen. A bigger β means more neck tilt.</div></div>
+    <div><div class="ft2">Figure 5b: Seat health map</div><div class="fs2">Percentile rank among all seats from 0 to 16 m. Further from the centre = better. <b>Inverse</b> means a lower raw value ranks higher.</div></div>
+  </div>
+  <svg id="a1" viewBox="0 0 680 330" style="margin-top:8px"></svg>
+  <div class="two keep src" style="border-top:0.75px solid #BFBFBF"><div>Source: own calculations.</div><div>Source: own calculations. Seats sampled every 0.1 m.</div></div>
+  <ul class="bul"><li>The best seat gives you the biggest screen, but you still look up 55.6° to its top edge. That is far above the 35° comfort limit used in cinema design, so real cinemas need a different rule.</li></ul>
+</div>
+
+<div class="part"><span>Part 2</span>Real Australian cinemas</div>
+
+<!-- FIGURE 6: AU small multiples -->
+<div class="page">
+  <div class="ft">Figure 6: Viewing angle by seat position across Australian cinema formats</div>
+  <div class="fs">Viewing angle in degrees (y) against metres from the front row (x). Typical adult (170 cm) on the venue’s normal seat. Shaded = neck tilt above 35°.</div>
+  <svg id="f5" viewBox="0 0 680 520"></svg>
+  <div class="src">Source: own calculations. IMAX screen heights: Melbourne 23 m (Museums Victoria), Sydney 24 m (IMAX Sydney). Other dimensions are typical assumptions. The 35° limit comes from SMPTE EG-18 and THX guidance.</div>
+  <ul class="bul"><li>In real cinemas the bottom of the screen sits near eye level, so on viewing angle alone the front row always wins. What really decides the best seat is the 35° neck limit: sit in the first row where your neck is comfortable.</li></ul>
+</div>
+
+<!-- FIGURE 7 -->
+<div class="page">
+  <div class="two keep">
+    <div><div class="ft2">Figure 7a: Seat finder</div><div class="fs2">Seating from the front row (0%) to the back row (100%), for a typical adult (170 cm). Grey = neck-strain zone. Dot = best comfortable row.</div></div>
+    <div><div class="ft2">Figure 7b: What you see from there</div><div class="fs2">Viewing angle θ in degrees: best comfortable row compared with the front row.</div></div>
+  </div>
+  <svg id="a2" viewBox="0 0 680 352" style="margin-top:8px"></svg>
+  <div class="src">Source: own calculations. Same assumptions as Figure 6.</div>
+</div>
+
+<div class="part"><span>Part 3</span>Your body, your eyes, your seat</div>
+
+<!-- FIGURE 8: side view -->
+<div class="page">
+  <div class="ft">Figure 8: How your height and your seat change your view</div>
+  <div class="fs">Your eye height = floor height at your row + seat height + sitting eye height (about 45% of your standing height). Reclining seats and beanbags tilt your head back, which reduces neck strain.</div>
+  <div class="btns" id="sfb"></div>
+  <div class="ctl">
+    <label>Your height <input type="range" id="s_st" min="100" max="210" step="1" value="170"><b id="s_stv">170 cm</b></label>
+    <label>Seat height <input type="range" id="s_seat" min="15" max="70" step="1" value="45"><b id="s_seatv">45 cm</b></label>
+    <label>Your row <input type="range" id="s_row" min="0" max="16" step="1" value="0"><b id="s_rowv">Row A</b></label>
+    <div class="btns" style="margin:0"><button id="s_best" class="on">Jump to best row</button></div>
+  </div>
+  <div class="kpi"><div><div class="l">Eye height above floor</div><div class="v" id="k_eye">–</div></div><div><div class="l">Neck tilt</div><div class="v" id="k_tilt">–</div></div><div><div class="l">Viewing angle θ</div><div class="v" id="k_th">–</div></div><div><div class="l">Best row for you</div><div class="v" id="k_best" style="color:#1F5FAD">–</div></div></div>
+  <svg id="side" viewBox="0 0 680 460"></svg>
+  <div id="s_note" style="font-size:11px;color:#C00000;margin-top:6px;min-height:14px"></div>
+  <div class="src">Source: own calculations. Sitting eye height ≈ 0.452 × standing height (adult average from Pheasant, <i>Bodyspace</i>).</div>
+</div>
+
+<!-- FIGURE 9: best row by height -->
+<div class="page">
+  <div class="ft">Figure 9: Best row by your height</div>
+  <div class="fs">The first row where neck tilt is 35° or less, on the venue's normal seat. Row A is the front row.</div>
+  <svg id="hrow" viewBox="0 0 680 320"></svg>
+  <div class="src">Source: own calculations. Average Australian adult heights: men about 176 cm, women about 162 cm (ABS).</div>
+  <ul class="bul">
+    <li>Shorter people sit lower and look up more steeply. At IMAX Sydney and premium large-format cinemas, viewers under about 155 cm should sit one row further back. In smaller cinemas, height makes no difference to the best row.</li>
+    <li>A 10 cm booster cushion, where the cinema offers one, gives a child roughly the eye height of someone 20 cm taller.</li>
+  </ul>
+</div>
+
+<!-- FIGURE 10: matrix -->
+<div class="page">
+  <div class="ft">Figure 10: Seat finder matrix for every cinema format and viewer</div>
+  <div class="fs">Recommended row (letter) and its centre seats. On your own, any seat in that range works. For a group, use Figure 11. Darker shading = bigger viewing angle θ.</div>
+  <table class="mx" id="mx"></table>
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:11px;margin-top:10px">
+    <span>θ 15°</span><span style="display:inline-block;width:150px;height:8px;background:linear-gradient(90deg,#DEEBF7,#08519C)"></span><span>60°</span>
+    <span style="margin-left:10px;color:#C00000">† No row fully meets this viewer’s limits, so the closest compromise is shown.</span>
+  </div>
+  <div class="src">Source: own calculations. Heights: typical adult 170 cm; short adult 150 cm; tall adult 190 cm; child (about 8) 128 cm; older adult 65+ 165 cm. Limits: neck tilt ≤ 35°, except older adult 65+ ≤ 25° and low central vision (e.g. macular degeneration) ≤ 40°; tunnel vision (e.g. glaucoma, retinitis pigmentosa), screen ≤ 20° tall; motion-sensitive (motion sickness, migraine, photosensitive epilepsy), screen ≤ 30° tall; wheelchair user, 50 cm seat with no recline. Illustrative only, not medical advice.</div>
+</div>
+
+<div class="part"><span>Part 4</span>Book your seats</div>
+
+<!-- FIGURE 11: seat planner -->
+<div class="page">
+  <div class="ft">Figure 11: Seat planner for one person or a whole group</div>
+  <div class="fs">Add each person’s height and eyesight, or just your own. The planner finds the row that works for everyone, the exact seats, and who should sit where.</div>
+  <div class="gl">Cinema</div>
+  <div class="btns" id="gfb"></div>
+  <div class="gl">Start from an example</div>
+  <div class="btns" id="gpre"></div>
+  <div class="gl">Your group <span id="g_count" style="color:#595959;font-weight:400"></span></div>
+  <div id="g_people"></div>
+  <div class="btns" style="margin-top:6px"><button id="g_add">+ Add person</button><span id="g_err" style="font-size:11px;color:#C00000;align-self:center"></span></div>
+  <div class="kpi" style="margin-top:12px"><div><div class="l">Book row</div><div class="v" id="g_row" style="color:#1F5FAD">–</div></div><div><div class="l" id="g_seatsl">Seats</div><div class="v" id="g_seats">–</div></div><div><div class="l">Everyone within limits?</div><div class="v" id="g_ok">–</div></div><div><div class="l">Row set by</div><div class="v" id="g_by" style="font-size:18px;padding-top:4px">–</div></div></div>
+  <div id="g_why" class="why"></div>
+  <div id="g_backup" style="font-size:12px;margin:-4px 0 10px"></div>
+  <svg id="gmap" viewBox="0 0 680 300"></svg>
+  <div class="lg"><span><i style="background:#1F5FAD"></i>Your group</span><span><i style="background:#BDD7EE"></i>Rows within everyone's limits</span><span><i style="background:#E4E4E4"></i>Outside someone's limits</span></div>
+  <div class="ft2" style="margin-top:16px">Who gives up what</div>
+  <div class="fs2">Numbers match the seats on the map. Grey dot = each person's own best row. Blue dot = the group row. The figures on the right show each person's viewing angle and neck tilt in the group row.</div>
+  <svg id="gdb" viewBox="0 0 680 200"></svg>
+  <div class="src">Source: own calculations. Same assumptions as Figure 10. The person with the most to gain from a centred view gets the middle seat. Wheelchair users and motion-sensitive viewers go to the ends of the block, next to the aisle. Check the booking map for wheelchair spaces, which are only in some rows. Drive-ins are not included because a group shares one car; see Figure 10 for the best bay row. Illustrative only, not medical advice.</div>
+</div>
+
+<div class="cover" style="border-top-width:3px">
+  <div class="ft" style="margin-bottom:6px">Key takeaways</div>
+  <ul class="bul" style="margin-top:0">
+    <li>In the textbook cinema, the best seat is 4.89 m from the front row, where the screen fills 51.2° of your view.</li>
+    <li>In real cinemas, sit in the first row where the top of the screen is no more than 35° above your eyes. For a typical adult that is Row D in a standard multiplex and Row R at IMAX.</li>
+    <li>Height matters a little. Shorter people and children look up more steeply, so on the biggest screens they should sit one row further back or use a booster cushion.</li>
+    <li>For a group, find each person’s first comfortable row. Book the furthest back of those: everyone is within their limits there, because moving back only reduces neck tilt and screen size. Give the middle seat to whoever needs the most central view.</li>
+    <li>Your eyes change the answer. Older viewers should sit further back, viewers with low central vision closer, and viewers with tunnel vision or motion sensitivity much further back.</li>
+  </ul>
+</div>
+
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg',R2D=180/Math.PI,C3=Math.sqrt(3)/2,LT="ABCDEFGHJKLMNPQRSTUVWXYZ";
+const BL='#4472C4',GR='#A6A6A6';
+function K(id){const s=document.getElementById(id);return (t,at,tx)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);if(tx!=null)e.textContent=tx;s.appendChild(e);return e;};}
+const tb=x=>{const a=3+C3*x,b=x/2+1,be=Math.atan((14-b)/a)*R2D,al=Math.atan((4-b)/a)*R2D;return{a,b,be,al,th:be-al,ce:Math.atan((9-b)/a)*R2D};};
+const XB=4.885;
+// formats: name, bottom, height, front dist, rake, eye h, depth, row pitch, seats
+// Formats: n name, d screen bottom, h screen height, e front-row distance, rake (deg), L depth along floor, p row pitch, N seats per row,
+// s seat height (m), rec head-back recline (deg), obs = rows can block each other, fix = fixed eye height (textbook problem only)
+const FM=[
+ {n:"Textbook cinema",d:4,h:10,e:3,rake:30,L:16,p:1.0,N:20,s:0.45,rec:0,obs:0,fix:1.0},
+ {n:"IMAX Sydney",d:1,h:24,e:8,rake:30,L:26,p:1.1,N:30,s:0.45,rec:0,obs:1},
+ {n:"IMAX Melbourne",d:1,h:23,e:8,rake:30,L:26,p:1.1,N:30,s:0.45,rec:0,obs:1},
+ {n:"Premium large format",d:1.5,h:8.5,e:6,rake:25,L:22,p:1.1,N:30,s:0.45,rec:0,obs:1},
+ {n:"Standard multiplex",d:1.5,h:5,e:4,rake:22,L:18,p:1.1,N:20,s:0.45,rec:0,obs:1},
+ {n:"Recliner / Gold Class",d:1.2,h:4.2,e:5,rake:15,L:10,p:1.7,N:12,s:0.42,rec:20,obs:1},
+ {n:"Boutique arthouse",d:1.2,h:3.4,e:3.5,rake:10,L:12,p:1.0,N:16,s:0.45,rec:0,obs:1},
+ {n:"Outdoor cinema",d:2,h:7,e:6,rake:0,L:34.5,p:1.5,N:24,s:0.20,rec:15,obs:1},
+ {n:"Drive-in (car bays)",d:4,h:13,e:20,rake:0,L:150,p:8,N:12,s:0.55,rec:10,obs:0}
+];
+// Body proportions (share of standing height), from adult anthropometric tables (Pheasant, Bodyspace)
+const SEH=0.452, SH=0.52, FRONT=1.76, HIDE=0.05;
+// Profiles: name, height (m), seat override (m or null), neck limit, field limit, recline override (null = seat's own)
+const PR=[
+ {n:"Typical adult",st:1.70,seat:null,bmax:35,tmax:99,rec:null},
+ {n:"Short adult (150 cm)",st:1.50,seat:null,bmax:35,tmax:99,rec:null},
+ {n:"Tall adult (190 cm)",st:1.90,seat:null,bmax:35,tmax:99,rec:null},
+ {n:"Child (about 8)",st:1.28,seat:null,bmax:35,tmax:99,rec:null},
+ {n:"Older adult 65+",st:1.65,seat:null,bmax:25,tmax:99,rec:null},
+ {n:"Low central vision",st:1.70,seat:null,bmax:40,tmax:99,rec:null},
+ {n:"Tunnel vision",st:1.70,seat:null,bmax:35,tmax:20,rec:null},
+ {n:"Motion-sensitive",st:1.70,seat:null,bmax:35,tmax:30,rec:null},
+ {n:"Wheelchair user",st:1.70,seat:0.50,bmax:35,tmax:99,rec:0}
+];
+// o = {st: your height, seat: your seat height, front: height of person in front (0 = empty), rec: your recline}
+function view(f,x,o){
+  const r=f.rake/R2D,a=f.e+x*Math.cos(r),fl=x*Math.sin(r),rec=(o.rec==null?f.rec:o.rec),ca=Math.cos(rec/R2D);
+  const seat=(o.seat==null?f.s:o.seat),eye=f.fix?fl+f.fix:fl+seat+SEH*o.st*ca,top=f.d+f.h,bot=f.d;
+  let yb=-1e9,head=null,af=null;
+  if(f.obs&&x>=f.p-1e-9&&o.front>0){const xf=x-f.p;af=f.e+xf*Math.cos(r);head=xf*Math.sin(r)+f.s+SH*o.front*Math.cos(f.rec/R2D);yb=eye+(head-eye)*a/(a-af);}
+  const yv=Math.min(Math.max(yb,bot),top),blk=(yv-bot)/f.h;
+  const be=Math.atan2(top-eye,a)*R2D,th=be-Math.atan2(yv-eye,a)*R2D;
+  return{a,fl,eye,be,tilt:be-rec,th,blk,yv,head,af,rec,seat};
+}
+function rowsOf(f){return Math.floor(f.L/f.p+1e-9)+1;}
+function solve(f,p,o){
+  o=Object.assign({st:p.st,seat:p.seat,front:0,rec:p.rec},o||{});
+  const n=rowsOf(f);let best=null;const ok=[];
+  for(let k=0;k<n;k++){const g=view(f,k*f.p,o),pen=Math.max(0,g.tilt-p.bmax)+Math.max(0,g.th-p.tmax)+100*Math.max(0,g.blk-HIDE);ok.push(pen<1e-9);
+    const key=pen>1e-9?[1,pen]:[0,-g.th];if(!best||key[0]<best.key[0]||(key[0]===best.key[0]&&key[1]<best.key[1]))best={key,k,g};}
+  return{n,ok,k:best.k,g:best.g,fit:best.key[0]===0};
+}
+const TYP=PR[0],TYPO={st:1.70,seat:null,front:0,rec:null};
+
+// ---------- Figure 1 explorer ----------
+(function(){
+  const mk=K('e_scene'),S=30,OX=60,OY=470,px=X=>OX+X*S,py=Y=>OY-Y*S;
+  mk('path',{d:`M${px(-0.5)},${py(0)}L${px(3)},${py(0)}L${px(3+C3*17.5)},${py(8.75)}`,fill:'none',stroke:'#404040','stroke-width':1.5});
+  mk('line',{x1:60,y1:470,x2:60,y2:30,stroke:'#BFBFBF','stroke-width':1});
+  mk('rect',{x:56,y:50,width:8,height:300,rx:2,fill:BL});
+  mk('text',{x:76,y:44,fill:'#404040','font-size':12},'Screen');
+  const wedge=mk('polygon',{fill:'#ED7D31',opacity:0.25}),la=mk('line',{stroke:'#C55A11','stroke-width':1.2}),lb=mk('line',{stroke:'#C55A11','stroke-width':1.2}),arc=mk('path',{fill:'none',stroke:'#C55A11','stroke-width':1.5});
+  for(let k=0;k<=16;k++){const cx=px(3+C3*k),cy=py(k/2);mk('path',{d:`M${cx-8},${cy-8}h14v-14`,fill:'none',stroke:'#7F7F7F','stroke-width':1.5,'stroke-linecap':'round'});}
+  const body=mk('line',{stroke:'#000','stroke-width':3,'stroke-linecap':'round'}),head=mk('circle',{r:7,fill:'#1F5FAD'});
+  mk('text',{x:150,y:490,'text-anchor':'middle',fill:'#595959','font-size':12},'Front row');
+  mk('path',{d:'M190,470 A40,40 0 0 0 184.6,450',fill:'none',stroke:'#595959','stroke-width':1});mk('text',{x:196,y:466,fill:'#595959','font-size':12},'30°');
+  const mc=K('e_curve'),X0=60,W=580,cx=x=>X0+x*W/16,cy=t=>190-(t-25)*170/30;
+  [30,40,50].forEach(t=>{mc('line',{x1:X0,x2:640,y1:cy(t),y2:cy(t),stroke:'#E4E4E4'});mc('text',{x:X0-8,y:cy(t)+4,'text-anchor':'end',fill:'#000','font-size':12},t+'°');});
+  mc('line',{x1:X0,x2:640,y1:190,y2:190,stroke:'#000','stroke-width':0.8});
+  [0,4,8,12,16].forEach(x=>mc('text',{x:cx(x),y:210,'text-anchor':'middle',fill:'#000','font-size':12},x+' m'));
+  let d='';for(let i=0;i<=320;i++){const x=i/20;d+=(i?'L':'M')+cx(x).toFixed(1)+','+cy(tb(x).th).toFixed(1);}
+  mc('line',{x1:cx(XB),x2:cx(XB),y1:20,y2:190,stroke:BL,'stroke-width':0.8,'stroke-dasharray':'4 4'});
+  mc('path',{d,fill:'none',stroke:BL,'stroke-width':2.2});
+  mc('text',{x:cx(XB)+8,y:16,fill:BL,'font-size':12},'Peak 51.2° at 4.89 m');
+  const dot=mc('circle',{r:6,fill:'#ED7D31',stroke:'#fff','stroke-width':2});
+  const $=id=>document.getElementById(id);
+  function draw(x){const g=tb(x),mx=px(g.a),my=py(g.b),fx=px(3+C3*x),fy=py(x/2),Ay=py(4),By=py(14),Ax=px(0);
+    wedge.setAttribute('points',`${mx},${my} ${Ax},${Ay} ${Ax},${By}`);
+    [[la,Ay],[lb,By]].forEach(([e,y])=>{e.setAttribute('x1',mx);e.setAttribute('y1',my);e.setAttribute('x2',Ax);e.setAttribute('y2',y);});
+    head.setAttribute('cx',mx);head.setAttribute('cy',my);body.setAttribute('x1',mx+2);body.setAttribute('y1',my+8);body.setAttribute('x2',fx+2);body.setAttribute('y2',fy-9);
+    const n=v=>v<0?v+2*Math.PI:v,aA=n(Math.atan2(Ay-my,Ax-mx)),aB=n(Math.atan2(By-my,Ax-mx)),r=44;
+    arc.setAttribute('d',`M${mx+r*Math.cos(aA)},${my+r*Math.sin(aA)}A${r},${r} 0 0 1 ${mx+r*Math.cos(aB)},${my+r*Math.sin(aB)}`);
+    $('e_x').textContent=x.toFixed(1)+' m';$('e_t').textContent=g.th.toFixed(1)+'°';$('e_b').textContent=g.be.toFixed(1)+'°';
+    dot.setAttribute('cx',cx(x));dot.setAttribute('cy',cy(g.th));
+    const v=$('e_v');if(Math.abs(x-XB)<0.2){v.textContent='Best seat';v.style.color='#1F7A1F';}else{v.textContent=x<XB?'Too close':'Too far';v.style.color='#000';}}
+  let anim=0;
+  $('e_sl').addEventListener('input',e=>{cancelAnimationFrame(anim);draw(+e.target.value);});
+  $('e_go').addEventListener('click',()=>{cancelAnimationFrame(anim);const s=+$('e_sl').value,t0=performance.now();
+    if(Math.abs(s-XB)<0.005){draw(XB);return;}
+    const st=now=>{const p=Math.min(1,(now-t0)/900),x=s+(XB-s)*(1-Math.pow(1-p,3));$('e_sl').value=x;draw(x);if(p<1)anim=requestAnimationFrame(st);};anim=requestAnimationFrame(st);});
+  draw(0);
+})();
+
+// ---------- Figure 2 geometry ----------
+(function(){
+  const mk=K('geo'),t=(x,y,s,o)=>mk('text',Object.assign({x,y,fill:'#000','font-size':12},o||{}),s);
+  mk('line',{x1:80,y1:480,x2:80,y2:20,stroke:'#000','stroke-width':0.8});mk('line',{x1:70,y1:480,x2:600,y2:480,stroke:'#000','stroke-width':0.8});
+  mk('rect',{x:76,y:32,width:8,height:320,rx:2,fill:BL});
+  mk('path',{d:'M176,480 L509,288',fill:'none',stroke:'#404040','stroke-width':1.5});
+  mk('path',{d:'M204,480 A28,28 0 0 0 200.2,466',fill:'none',stroke:'#595959'});t(210,477,'30°',{fill:'#595959'});
+  mk('line',{x1:286.8,y1:416,x2:286.8,y2:480,stroke:'#7F7F7F','stroke-dasharray':'3 3'});mk('path',{d:'M278.8,480 V472 H286.8',fill:'none',stroke:'#7F7F7F'});
+  mk('line',{x1:80,y1:384,x2:286.8,y2:384,stroke:'#7F7F7F','stroke-dasharray':'3 3'});mk('path',{d:'M80,376 H88 V384',fill:'none',stroke:'#7F7F7F'});
+  mk('line',{x1:286.8,y1:384,x2:80,y2:352,stroke:'#C55A11','stroke-width':1.5});mk('line',{x1:286.8,y1:384,x2:80,y2:32,stroke:'#C55A11','stroke-width':1.5});
+  mk('path',{d:'M236.8,384 A50,50 0 0 1 237.4,376.4',fill:'none',stroke:'#C55A11','stroke-width':1.5});
+  mk('path',{d:'M216.8,384 A70,70 0 0 1 251.4,323.6',fill:'none',stroke:'#C55A11','stroke-width':1.5});
+  t(216,342,'β',{fill:'#C55A11','font-size':15,'font-weight':700});t(222,401,'α',{fill:'#C55A11','font-size':15,'font-weight':700});
+  mk('line',{x1:286.8,y1:389,x2:286.8,y2:416,stroke:'#000','stroke-width':3,'stroke-linecap':'round'});
+  mk('circle',{cx:286.8,cy:384,r:5,fill:'#1F5FAD'});mk('circle',{cx:286.8,cy:416,r:3,fill:'#000'});mk('circle',{cx:176,cy:480,r:3,fill:'#404040'});
+  t(224,436,'x');t(278,406,'1 m',{'text-anchor':'end'});t(298,380,'M (a, b)',{'font-weight':700});t(294,436,'C');t(286.8,500,'H',{'text-anchor':'middle'});
+  t(176,500,'D (3, 0)',{'text-anchor':'middle'});t(66,356,'A (0, 4)',{'text-anchor':'end'});t(66,36,'B (0, 14)',{'text-anchor':'end'});t(66,388,'K',{'text-anchor':'end'});t(66,494,'O',{'text-anchor':'end'});
+})();
+
+// ---------- Figure 3 ----------
+(function(){
+  const mk=K('f3'),L=52,R=660,T=12,B=322,xs=x=>L+x*(R-L)/16,ys=v=>T+(90-v)*(B-T)/120,ink={fill:'#000','font-size':12};
+  mk('line',{x1:L,y1:T,x2:L,y2:B,stroke:'#000','stroke-width':0.8});mk('line',{x1:L,y1:B,x2:R,y2:B,stroke:'#000','stroke-width':0.8});
+  mk('line',{x1:L,y1:ys(0),x2:R,y2:ys(0),stroke:'#BFBFBF','stroke-width':0.8});
+  for(let v=-30;v<=90;v+=15){mk('line',{x1:L-4,x2:L,y1:ys(v),y2:ys(v),stroke:'#000','stroke-width':0.8});mk('text',Object.assign({x:L-8,y:ys(v)+4,'text-anchor':'end'},ink),v);}
+  for(let x=0;x<=16;x+=2){mk('line',{x1:xs(x),x2:xs(x),y1:B,y2:B+4,stroke:'#000','stroke-width':0.8});mk('text',Object.assign({x:xs(x),y:B+18,'text-anchor':'middle'},ink),x+' m');}
+  const path=k=>{let d='';for(let i=0;i<=320;i++){const x=i/20;d+=(i?'L':'M')+xs(x).toFixed(1)+','+ys(tb(x)[k]).toFixed(1);}return d;};
+  mk('path',{d:path('al'),fill:'none',stroke:GR,'stroke-width':1.8});mk('path',{d:path('be'),fill:'none',stroke:'#000','stroke-width':1.6});mk('path',{d:path('th'),fill:'none',stroke:BL,'stroke-width':2.2});
+  const pb=tb(XB);mk('line',{x1:xs(XB),x2:xs(XB),y1:ys(pb.th),y2:B,stroke:BL,'stroke-width':0.8,'stroke-dasharray':'3 3'});
+  mk('circle',{cx:xs(XB),cy:ys(pb.th),r:3.5,fill:BL});mk('line',{x1:xs(XB),x2:xs(XB),y1:ys(pb.th),y2:ys(78),stroke:BL,'stroke-width':0.8,'stroke-dasharray':'3 3'});mk('text',{x:xs(XB),y:ys(81),'text-anchor':'middle',fill:BL,'font-size':12,'font-weight':700},'Peak 51.2° at 4.89 m');
+  [['θ = β − α  (viewing angle)',BL],['β  (to top of screen)','#000'],['α  (to bottom of screen)',GR]].forEach((l,i)=>{const y=ys(-8)+i*18;mk('line',{x1:72,x2:100,y1:y,y2:y,stroke:l[1],'stroke-width':2});mk('text',Object.assign({x:108,y:y+4},ink),l[0]);});
+})();
+
+// ---------- Figure 4 ----------
+(function(){
+  const mk=K('f4'),L=52,R=660,T=14,B=262,ys=v=>T+(6-v)*(B-T)/8,xs=x=>L+x*(R-L)/16,ink={fill:'#000','font-size':12};
+  mk('line',{x1:L,y1:T,x2:L,y2:B,stroke:'#000','stroke-width':0.8});
+  for(let v=-2;v<=6;v+=2){mk('line',{x1:L-4,x2:L,y1:ys(v),y2:ys(v),stroke:'#000','stroke-width':0.8});mk('text',Object.assign({x:L-8,y:ys(v)+4,'text-anchor':'end'},ink),v);}
+  const bw=(R-L)/32*0.62;
+  for(let i=0;i<32;i++){const x=i*0.5,d=tb(x+0.5).th-tb(x).th,c=xs(x+0.25),y0=ys(0),y1=ys(d);mk('rect',{x:c-bw/2,y:Math.min(y0,y1),width:bw,height:Math.abs(y1-y0),fill:d>=0?BL:'#000'});}
+  mk('line',{x1:L,y1:ys(0),x2:R,y2:ys(0),stroke:'#000','stroke-width':0.8});
+  for(let x=0;x<=16;x+=2)mk('text',Object.assign({x:xs(x),y:B+20,'text-anchor':'middle'},ink),x+' m');
+  mk('line',{x1:xs(XB),x2:xs(XB),y1:ys(5.4),y2:ys(-1.6),stroke:BL,'stroke-width':0.8,'stroke-dasharray':'3 3'});
+  mk('text',{x:xs(XB)+8,y:ys(5.2),fill:BL,'font-size':12},'f′(x) = 0 at x ≈ 4.89 m');
+  [['Gaining angle',BL],['Losing angle','#000']].forEach((l,i)=>{const y=ys(3.6)+i*18;mk('rect',{x:470,y:y-9,width:10,height:10,fill:l[1]});mk('text',Object.assign({x:486,y},ink),l[0]);});
+})();
+
+// ---------- Chart A1 ----------
+(function(){
+  const mk=K('a1'),ink={fill:'#000','font-size':12},best=tb(XB),front=tb(0);
+  const cats=[['Viewing angle θ','th'],['Neck tilt β (top)','be'],['Screen centre','ce'],['Bottom edge α','al']];
+  const L=120,R=322,xs=v=>L+v*(R-L)/80,y0=14,gap=58;
+  cats.forEach((c,i)=>{const y=y0+i*gap;mk('text',Object.assign({x:L-8,y:y+16,'text-anchor':'end'},ink),c[0]);
+    [[best,BL],[front,GR]].forEach((p,j)=>{const v=p[0][c[1]];mk('rect',{x:xs(0),y:y+j*15,width:Math.max(1,xs(v)-xs(0)),height:12,fill:p[1]});mk('text',{x:xs(v)+4,y:y+j*15+10,fill:'#404040','font-size':11},v.toFixed(1)+'°');});});
+  const ab=y0+4*gap-4;mk('line',{x1:xs(0),x2:xs(0),y1:y0-6,y2:ab,stroke:'#000','stroke-width':0.8});mk('line',{x1:xs(0),x2:R,y1:ab,y2:ab,stroke:'#000','stroke-width':0.8});
+  for(let v=0;v<=80;v+=20){mk('line',{x1:xs(v),x2:xs(v),y1:ab,y2:ab+4,stroke:'#000','stroke-width':0.8});mk('text',Object.assign({x:xs(v),y:ab+18,'text-anchor':'middle'},ink),v);}
+  mk('rect',{x:190,y:ab+32,width:132,height:44,fill:'#fff',stroke:'#7F7F7F','stroke-width':0.6});
+  [['Best seat, 4.89 m',BL],['Front row, 0 m',GR]].forEach((l,i)=>{mk('rect',{x:198,y:ab+40+i*18,width:10,height:10,fill:l[1]});mk('text',{x:214,y:ab+49+i*18,fill:'#000','font-size':11},l[0]);});
+  const samp=[];for(let i=0;i<=160;i++)samp.push(tb(i/10));
+  const axes=[p=>p.th,p=>p.a,p=>-p.be,p=>-Math.abs(p.ce)],pr=(f,p)=>{const v=f(p);return samp.filter(q=>f(q)<=v+1e-9).length/samp.length;};
+  const CX=520,CY=150,RR=95,ang=[-90,0,90,180].map(a=>a*Math.PI/180),pt=(k,r)=>[CX+r*Math.cos(ang[k]),CY+r*Math.sin(ang[k])];
+  mk('polygon',{points:ang.map((_,k)=>pt(k,RR).join(',')).join(' '),fill:'none',stroke:'#000','stroke-width':0.9});
+  mk('polygon',{points:ang.map((_,k)=>pt(k,RR/2).join(',')).join(' '),fill:'none',stroke:'#BFBFBF','stroke-width':0.6});
+  ang.forEach((_,k)=>{const p=pt(k,RR);mk('line',{x1:CX,y1:CY,x2:p[0],y2:p[1],stroke:'#000','stroke-width':0.6});});
+  const poly=(x,st)=>mk('polygon',Object.assign({points:axes.map((f,k)=>pt(k,Math.max(0.07,pr(f,tb(x)))*RR).join(',')).join(' ')},st));
+  poly(XB,{fill:BL,'fill-opacity':0.85,stroke:BL});poly(0,{fill:'none',stroke:GR,'stroke-width':1.8});poly(15,{fill:'none',stroke:'#000','stroke-width':1.4,'stroke-dasharray':'4 3'});
+  const lb={fill:'#000','font-size':12,'font-weight':700};
+  mk('text',Object.assign({x:CX,y:CY-RR-8,'text-anchor':'middle'},lb),'Viewing angle');mk('text',Object.assign({x:CX+RR+6,y:CY-4},lb),'Eye');mk('text',Object.assign({x:CX+RR+6,y:CY+10},lb),'relief');
+  mk('text',Object.assign({x:CX,y:CY+RR+16,'text-anchor':'middle'},lb),'Neck comfort (inverse)');mk('text',Object.assign({x:CX-RR-6,y:CY-4,'text-anchor':'end'},lb),'Centred gaze');mk('text',Object.assign({x:CX-RR-6,y:CY+10,'text-anchor':'end'},lb),'(inverse)');
+  const ly=CY+RR+40;mk('rect',{x:410,y:ly-9,width:10,height:10,fill:BL});mk('text',{x:424,y:ly,fill:'#000','font-size':11},'Best seat');
+  mk('line',{x1:490,x2:506,y1:ly-4,y2:ly-4,stroke:GR,'stroke-width':2});mk('text',{x:512,y:ly,fill:'#000','font-size':11},'Front row');
+  mk('line',{x1:576,x2:592,y1:ly-4,y2:ly-4,stroke:'#000','stroke-width':2,'stroke-dasharray':'4 3'});mk('text',{x:598,y:ly,fill:'#000','font-size':11},'15 m back');
+})();
+
+// ---------- Figure 6 small multiples ----------
+(function(){
+  const mk=K('f5'),ink={fill:'#000','font-size':11};
+  FM.forEach((f,i)=>{const ox=(i%3)*227,oy=Math.floor(i/3)*162,L=ox+34,R=ox+214,T=oy+26,B=oy+128,L0=f.L,xs=x=>L+x*(R-L)/L0,ys=v=>B-v*(B-T)/80;
+    let xc=null;for(let k=0;k<=400;k++){const x=k*L0/400;if(view(f,x,TYPO).tilt<=35){xc=x;break;}}
+    const r=solve(f,TYP);
+    if(xc>0)mk('rect',{x:L,y:T,width:xs(xc)-L,height:B-T,fill:'#D9D9D9'});
+    mk('text',{x:ox+6,y:oy+14,fill:'#000','font-size':12,'font-weight':700},f.n.replace(' (car bays)',''));
+    mk('line',{x1:L,y1:T,x2:L,y2:B,stroke:'#000','stroke-width':0.8});mk('line',{x1:L,y1:B,x2:R,y2:B,stroke:'#000','stroke-width':0.8});
+    [0,40,80].forEach(v=>mk('text',Object.assign({x:L-5,y:ys(v)+4,'text-anchor':'end'},ink),v));
+    mk('text',Object.assign({x:L,y:B+14,'text-anchor':'middle'},ink),'0');mk('text',Object.assign({x:R,y:B+14,'text-anchor':'end'},ink),L0+' m');
+    let d='';for(let k=0;k<=300;k++){const x=k*L0/300;d+=(k?'L':'M')+xs(x).toFixed(1)+','+ys(view(f,x,TYPO).th).toFixed(1);}
+    mk('path',{d,fill:'none',stroke:BL,'stroke-width':1.8,'stroke-linejoin':'round'});
+    const xb=r.k*f.p;mk('circle',{cx:xs(xb),cy:ys(r.g.th),r:3.5,fill:BL,stroke:'#fff','stroke-width':1.2});
+    const right=xs(xb)>ox+150;mk('text',{x:right?xs(xb)-6:xs(xb)+6,y:right?ys(r.g.th)+16:ys(r.g.th)-8,'text-anchor':right?'end':'start',fill:BL,'font-size':11,'font-weight':700},'Row '+LT[r.k]+(r.fit?'':'†')+' · '+r.g.th.toFixed(1)+'°');});
+  const ly=502;mk('line',{x1:40,x2:62,y1:ly-4,y2:ly-4,stroke:BL,'stroke-width':2});mk('text',Object.assign({x:68,y:ly},ink),'Viewing angle θ');
+  mk('rect',{x:206,y:ly-10,width:12,height:10,fill:'#D9D9D9'});mk('text',Object.assign({x:224,y:ly},ink),'Neck-strain zone (tilt > 35°)');
+  mk('circle',{cx:410,cy:ly-4,r:3.5,fill:BL});mk('text',Object.assign({x:420,y:ly},ink),'Best comfortable row');
+})();
+
+// ---------- Figure 7 seat finder ----------
+(function(){
+  const mk=K('a2'),ink={fill:'#000','font-size':12};
+  const L1=150,R1=355,L2=420,R2=660,T=10,RH=30,B=T+RH*FM.length,x1=v=>L1+v*(R1-L1),x2=v=>L2+v*(R2-L2)/80;
+  FM.forEach((f,i)=>{const cy=T+i*RH+RH/2;let xc=0;
+    for(let k=400;k>=0;k--){if(view(f,k*f.L/400,TYPO).tilt>35){xc=(k+1)*f.L/400;break;}}
+    const r=solve(f,TYP),fr=r.k*f.p/f.L;
+    mk('text',Object.assign({x:L1-10,y:cy+4,'text-anchor':'end'},ink),f.n.replace(' (car bays)',''));
+    mk('rect',{x:L1,y:cy-5,width:R1-L1,height:10,rx:2,fill:'#F2F2F2',stroke:'#BFBFBF','stroke-width':0.6});
+    if(xc>0)mk('rect',{x:L1,y:cy-5,width:x1(Math.min(1,xc/f.L))-L1,height:10,rx:2,fill:'#BFBFBF'});
+    mk('circle',{cx:x1(fr),cy,r:5.5,fill:BL,stroke:'#fff','stroke-width':1.5});
+    mk('text',{x:x1(fr)+(fr>0.75?-9:9),y:cy-8,'text-anchor':fr>0.75?'end':'start',fill:BL,'font-size':11,'font-weight':700},'Row '+LT[r.k]+(r.fit?'':'†'));
+    const tf=view(f,0,TYPO).th;mk('rect',{x:L2,y:cy-11,width:x2(r.g.th)-L2,height:10,fill:BL});mk('rect',{x:L2,y:cy+1,width:x2(tf)-L2,height:10,fill:GR});
+    mk('text',{x:x2(r.g.th)+4,y:cy-2,fill:'#404040','font-size':11},r.g.th.toFixed(1)+'°');mk('text',{x:x2(tf)+4,y:cy+10,fill:'#404040','font-size':11},tf.toFixed(1)+'°');});
+  [[L1,R1,[0,0.5,1],v=>Math.round(v*100)+'%',x1],[L2,R2,[0,20,40,60,80],v=>v,x2]].forEach(a=>{mk('line',{x1:a[0],x2:a[1],y1:B+4,y2:B+4,stroke:'#000','stroke-width':0.8});
+    a[2].forEach(v=>{mk('line',{x1:a[4](v),x2:a[4](v),y1:B+4,y2:B+8,stroke:'#000','stroke-width':0.8});mk('text',Object.assign({x:a[4](v),y:B+22,'text-anchor':'middle'},ink),a[3](v));});});
+  mk('line',{x1:L2,x2:L2,y1:T,y2:B+4,stroke:'#000','stroke-width':0.8});
+  const ly=B+44;mk('rect',{x:L1,y:ly-9,width:10,height:10,fill:'#BFBFBF'});mk('text',{x:L1+15,y:ly,fill:'#000','font-size':11},'Neck-strain zone');
+  mk('circle',{cx:L1+125,cy:ly-4,r:5,fill:BL});mk('text',{x:L1+135,y:ly,fill:'#000','font-size':11},'Best comfortable row');
+  [['Best comfortable row',BL],['Front row',GR]].forEach((l,i)=>{const x=L2+i*130;mk('rect',{x,y:ly-9,width:10,height:10,fill:l[1]});mk('text',{x:x+15,y:ly,fill:'#000','font-size':11},l[0]);});
+})();
+
+// shared button helper
+function btnRow(id,items,label,onPick){const box=document.getElementById(id);items.forEach(([i,txt])=>{const b=document.createElement('button');b.textContent=txt;b.dataset.i=i;b.addEventListener('click',()=>onPick(i));box.appendChild(b);});
+  return cur=>box.querySelectorAll('button').forEach(b=>{const on=+b.dataset.i===cur;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});}
+const AU=FM.map((f,i)=>[i,f.n.replace(' (car bays)','')]).slice(1);
+
+// ---------- Figure 8 side view ----------
+(function(){
+  const $=id=>document.getElementById(id),svg=$('side');
+  let fi=4,k=0;
+  const markF=btnRow('sfb',AU,'',i=>{fi=i;$('s_seat').value=Math.round(FM[fi].s*100);setRows();k=bestRow();$('s_row').value=k;draw();});
+  function opts(){return{st:+$('s_st').value/100,seat:+$('s_seat').value/100,front:0,rec:null};}
+  function bestRow(){return solve(FM[fi],{bmax:35,tmax:99},opts()).k;}
+  function setRows(){const n=rowsOf(FM[fi]);$('s_row').max=n-1;if(k>n-1)k=n-1;}
+  function draw(){
+    const f=FM[fi],o=opts(),x=k*f.p,g=view(f,x,o),r=f.rake/R2D,top=f.d+f.h,bot=f.d;
+    const xmin=-0.8,xmax=g.a+1.4,ymin=-0.4,ymax=Math.max(top,g.eye+0.5)+0.8;
+    const sc=Math.min(610/(xmax-xmin),420/(ymax-ymin)),X=a=>40+(a-xmin)*sc,Y=y=>450-(y-ymin)*sc;
+    let h=`<path d="M${X(-1)},${Y(0)} L${X(f.e)},${Y(0)} L${X(f.e+f.L*Math.cos(r))},${Y(f.L*Math.sin(r))}" fill="none" stroke="#404040" stroke-width="1.5"/>`;
+    for(let j=0;j<rowsOf(f);j++){const xa=f.e+j*f.p*Math.cos(r),yf=j*f.p*Math.sin(r);if(xa>xmax)break;
+      if(j!==k)h+=`<path d="M${X(xa-0.25)},${Y(yf)} V${Y(yf+f.s)} H${X(xa+0.25)} V${Y(yf+f.s+0.7)} M${X(xa+0.25)},${Y(yf+f.s)} V${Y(yf)}" fill="none" stroke="#BFBFBF" stroke-width="1.5"/>`;}
+    h+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(top+1)}" stroke="#BFBFBF"/>`;
+    h+=`<rect x="${X(0)-5}" y="${Y(top)}" width="6" height="${(top-bot)*sc}" fill="${BL}"/>`;
+    h+=`<polygon points="${X(g.a)},${Y(g.eye)} ${X(0)},${Y(top)} ${X(0)},${Y(bot)}" fill="${BL}" fill-opacity="0.12"/>`;
+    h+=`<line x1="${X(g.a)}" y1="${Y(g.eye)}" x2="${X(0)}" y2="${Y(top)}" stroke="${g.tilt>35?'#C00000':BL}" stroke-width="1.4"/>`;
+    h+=`<line x1="${X(g.a)}" y1="${Y(g.eye)}" x2="${X(0)}" y2="${Y(bot)}" stroke="${BL}" stroke-width="1.4"/>`;
+    h+=`<line x1="${X(g.a)}" y1="${Y(g.eye)}" x2="${X(g.a-Math.min(3,g.a*0.4))}" y2="${Y(g.eye)}" stroke="#7F7F7F" stroke-dasharray="3 3"/>`;
+    const ca=Math.cos(g.rec/R2D),sa=Math.sin(g.rec/R2D),sh=SH*o.st,hx=g.a+0.12+sa*(sh-0.12),headY=g.fl+g.seat+(sh-0.12)*ca,lw=Math.max(2,Math.min(6,0.08*sc));
+    h+=`<rect x="${X(g.a-0.28)}" y="${Y(g.fl+g.seat)}" width="${0.56*sc}" height="${g.seat*sc}" fill="#BFBFBF"/>`;
+    h+=`<rect x="${X(g.a+0.2)}" y="${Y(g.fl+g.seat+0.75)}" width="${0.12*sc}" height="${0.75*sc}" fill="#BFBFBF"/>`;
+    h+=`<line x1="${X(g.a+0.12)}" y1="${Y(g.fl+g.seat)}" x2="${X(hx)}" y2="${Y(headY-0.12)}" stroke="#1F5FAD" stroke-width="${lw}" stroke-linecap="round"/>`;
+    h+=`<line x1="${X(g.a+0.12)}" y1="${Y(g.fl+g.seat)}" x2="${X(g.a-0.38)}" y2="${Y(g.fl+g.seat)}" stroke="#1F5FAD" stroke-width="${lw}" stroke-linecap="round"/>`;
+    h+=`<line x1="${X(g.a-0.38)}" y1="${Y(g.fl+g.seat)}" x2="${X(g.a-0.38)}" y2="${Y(g.fl)}" stroke="#1F5FAD" stroke-width="${lw}" stroke-linecap="round"/>`;
+    h+=`<circle cx="${X(hx)}" cy="${Y(headY)}" r="${Math.max(4,0.12*sc)}" fill="#1F5FAD"/><circle cx="${X(g.a)}" cy="${Y(g.eye)}" r="3" fill="#ED7D31"/>`;
+    h+=`<text x="${X(g.a)}" y="${Y(g.fl+g.seat+sh*ca)-10}" text-anchor="middle" font-size="12" font-weight="700" fill="#1F5FAD">You</text>`;
+    h+=`<text x="${X(0)+10}" y="${Y(top)+14}" font-size="12" fill="#595959">Screen</text>`;
+    svg.innerHTML=h;
+    markF(fi);$('s_rowv').textContent='Row '+LT[k];$('s_stv').textContent=$('s_st').value+' cm';$('s_seatv').textContent=$('s_seat').value+' cm';
+    $('k_eye').textContent=g.eye.toFixed(2)+' m';$('k_tilt').textContent=g.tilt.toFixed(1)+'°';$('k_th').textContent=g.th.toFixed(1)+'°';$('k_best').textContent='Row '+LT[bestRow()];
+    $('k_tilt').style.color=g.tilt>35?'#C00000':'#000';
+    $('s_note').textContent=g.tilt>35?'Your neck tilt is above the 35° comfort limit. Move further back.':'';
+  }
+  ['s_st','s_seat'].forEach(id=>$(id).addEventListener('input',draw));
+  $('s_row').addEventListener('input',e=>{k=+e.target.value;draw();});
+  $('s_best').addEventListener('click',()=>{k=bestRow();$('s_row').value=k;draw();});
+  setRows();k=bestRow();$('s_row').value=k;draw();
+})();
+
+// ---------- Figure 9 best row by height ----------
+(function(){
+  const mk=K('hrow'),ink={fill:'#000','font-size':12};
+  const sets=[[1,'IMAX Sydney',BL,''],[3,'Premium large format','#000',''],[4,'Standard multiplex',GR,''],[5,'Recliner / Gold Class','#9DC3E6','5 3']];
+  const data=sets.map(([fi])=>{const f=FM[fi],pts=[];for(let s=100;s<=210;s++)pts.push([s,solve(f,TYP,{st:s/100}).k]);return pts;});
+  const kmax=Math.max(...data.flat().map(p=>p[1]))+1;
+  const L=56,R=470,T=24,B=270,xs=v=>L+(v-100)*(R-L)/110,ys=k=>T+k*(B-T)/kmax;
+  mk('line',{x1:L,y1:T,x2:L,y2:B,stroke:'#000','stroke-width':0.8});mk('line',{x1:L,y1:B,x2:R,y2:B,stroke:'#000','stroke-width':0.8});
+  for(let k=0;k<kmax;k+=2){mk('line',{x1:L,x2:R,y1:ys(k),y2:ys(k),stroke:'#EDEDED'});mk('text',Object.assign({x:L-8,y:ys(k)+4,'text-anchor':'end'},ink),LT[k]);}
+  for(let s=100;s<=210;s+=20){mk('line',{x1:xs(s),x2:xs(s),y1:B,y2:B+4,stroke:'#000','stroke-width':0.8});mk('text',Object.assign({x:xs(s),y:B+18,'text-anchor':'middle'},ink),s+' cm');}
+  mk('text',{x:(L+R)/2,y:B+36,'text-anchor':'middle',fill:'#000','font-size':12},'Your height');
+  mk('text',{x:L-8,y:T-10,'text-anchor':'end',fill:'#595959','font-size':11},'Front');
+  [[128,'Child (8)','middle',0],[162,'Avg woman','end',-3],[176,'Avg man','start',3]].forEach(([s,t,an,dx])=>{mk('line',{x1:xs(s),x2:xs(s),y1:T,y2:B,stroke:'#D9D9D9'});mk('text',{x:xs(s)+dx,y:T-8,'text-anchor':an,fill:'#595959','font-size':11},t);});
+  data.forEach((pts,i)=>{let d='';pts.forEach((p,j)=>{d+=j?`H${xs(p[0]).toFixed(1)}V${ys(p[1]).toFixed(1)}`:`M${xs(p[0]).toFixed(1)},${ys(p[1]).toFixed(1)}`;});
+    mk('path',{d,fill:'none',stroke:sets[i][2],'stroke-width':2.2,'stroke-dasharray':sets[i][3]});});
+  mk('text',{x:488,y:40,fill:'#000','font-size':11,'font-weight':700},'Cinema format');
+  sets.forEach((s,i)=>{const y=60+i*20;mk('line',{x1:488,x2:508,y1:y,y2:y,stroke:s[2],'stroke-width':2.2,'stroke-dasharray':s[3]});mk('text',{x:514,y:y+4,fill:'#000','font-size':11},s[1]);});
+})();
+
+// ---------- Figure 10 matrix ----------
+(function(){
+  const c1=[222,235,247],c2=[8,81,156],mix=t=>'rgb('+c1.map((v,i)=>Math.round(v+(c2[i]-v)*t)).join(',')+')';
+  let h='<colgroup><col style="width:104px">'+PR.map(()=>'<col>').join('')+'</colgroup><tr style="border-top:1.5px solid #000;border-bottom:0.75px solid #000"><th style="text-align:left;padding-left:4px">Cinema</th>'+PR.map(p=>`<th>${p.n.replace(' (',' <br>(')}</th>`).join('')+'</tr>';
+  FM.slice(1).forEach(f=>{h+=`<tr style="border-bottom:0.5px solid #D9D9D9"><td style="padding:5px 4px;font-weight:700;line-height:1.25">${f.n}</td>`;
+    PR.forEach(p=>{const r=solve(f,p),t=Math.max(0,Math.min(1,(r.g.th-15)/45)),fg=t>0.5?'#fff':'#000',c=f.N/2;
+      h+=`<td><div title="θ ${r.g.th.toFixed(1)}°, neck tilt ${r.g.tilt.toFixed(1)}°" style="background:${mix(t)};color:${fg};text-align:center;padding:5px 0;border-radius:2px"><div style="font-size:15px;font-weight:700;line-height:1.1">${LT[r.k]}${r.fit?'':'<span style="color:'+(t>0.5?'#FFC7CE':'#C00000')+'">†</span>'}</div><div style="font-size:11px;line-height:1.3">${c-1}–${c+2}</div></div></td>`;});
+    h+='</tr>';});
+  document.getElementById('mx').innerHTML=h;
+})();
+
+// ---------- Figure 11 seat planner ----------
+(function(){
+  const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const TY=[
+    {n:'Standard vision',bmax:35,tmax:99,seat:null,rec:null,pri:3,why:'35° neck limit'},
+    {n:'Older / stiff neck',bmax:25,tmax:99,seat:null,rec:null,pri:3,why:'25° neck limit'},
+    {n:'Low central vision',bmax:40,tmax:99,seat:null,rec:null,pri:5,why:'40° neck limit'},
+    {n:'Tunnel vision',bmax:35,tmax:20,seat:null,rec:null,pri:4,why:'screen no taller than 20°'},
+    {n:'Motion-sensitive',bmax:35,tmax:30,seat:null,rec:null,pri:1,why:'screen no taller than 30°'},
+    {n:'Wheelchair user',bmax:35,tmax:99,seat:0.50,rec:0,pri:0,why:'50 cm seat, no recline'}];
+  const PRE={
+    'Just me':[['You',170,0,0]],
+    'Three generations':[['Grandma',158,1,0],['Grandpa',172,2,0],['Mum',165,0,0],['Leo (8)',128,0,0]],
+    'Family of four':[['Mum',163,0,0],['Dad',180,0,0],['Mia (10)',140,0,0],['Sam (6)',116,0,1]],
+    'Friends night out':[['Alex',192,0,0],['Bea',151,0,0],['Chris',174,4,0],['Dee',168,0,0],['Eli',180,3,0]],
+    'With a wheelchair user':[['Jordan',170,5,0],['Kim',160,0,0],['Lee',185,0,0]]};
+  const MAXP=10,GF=FM.map((f,i)=>[i,f.n]).slice(1).filter(([i])=>!FM[i].n.startsWith('Drive'));
+  let gfi=4,people=[],preset='Three generations';
+  const markF=btnRow('gfb',GF,'',i=>{gfi=i;compute();});
+  const pnames=Object.keys(PRE),markPre=btnRow('gpre',pnames.map((n,i)=>[i,n]),'',i=>{preset=pnames[i];load(PRE[preset]);markPre(i);});
+  function load(list){document.getElementById('g_err').textContent='';people=list.map(([name,st,ty,b])=>({name,st,ty,boost:!!b}));build();}
+  function build(){
+    const box=$('g_people');box.innerHTML='';
+    people.forEach((p,i)=>{
+      const row=document.createElement('div');row.className='prow';
+      row.innerHTML=`<input type="text" maxlength="14" aria-label="Name" placeholder="Person ${i+1}" value="${esc(p.name)}">
+        <label class="ph">Height <input type="range" min="100" max="210" step="1" value="${p.st}" aria-label="Height"><b>${p.st} cm</b></label>
+        <select aria-label="Eyesight and needs">${TY.map((t,j)=>`<option value="${j}"${j===p.ty?' selected':''}>${t.n}</option>`).join('')}</select>
+        <label class="chk"><input type="checkbox"${p.boost?' checked':''}> Booster</label>
+        <button class="rm" aria-label="Remove ${esc(p.name||'person')}">×</button>`;
+      const [nm,rg,sel,bx,rm]=[row.querySelector('input[type=text]'),row.querySelector('input[type=range]'),row.querySelector('select'),row.querySelector('input[type=checkbox]'),row.querySelector('button')];
+      nm.addEventListener('input',()=>{p.name=nm.value.trim();compute();});
+      rg.addEventListener('input',()=>{p.st=+rg.value;rg.nextElementSibling.textContent=p.st+' cm';compute();});
+      sel.addEventListener('change',()=>{p.ty=+sel.value;compute();});
+      bx.addEventListener('change',()=>{p.boost=bx.checked;compute();});
+      rm.addEventListener('click',()=>{if(people.length<=1){$('g_err').textContent='A group needs at least one person.';return;}people.splice(i,1);$('g_err').textContent='';markPre(-1);build();});
+      box.appendChild(row);});
+    $('g_count').textContent='· '+people.length+(people.length===1?' person':' people');
+    compute();
+  }
+  $('g_add').addEventListener('click',()=>{if(people.length>=MAXP){$('g_err').textContent='The planner handles groups of up to '+MAXP+'.';return;}$('g_err').textContent='';people.push({name:'',st:170,ty:0,boost:false});markPre(-1);build();
+    const ins=$('g_people').querySelectorAll('input[type=text]');ins[ins.length-1].focus();});
+  const nm=(p,i)=>p.name||('Person '+(i+1));
+  const list=a=>a.length<=1?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+  function compute(){
+    markF(gfi);
+    const f=FM[gfi],n=rowsOf(f),N=f.N,G=people.length;
+    const P=people.map((p,i)=>{const t=TY[p.ty],o={st:p.st/100,seat:(t.seat==null?f.s:t.seat)+(p.boost?0.10:0),front:0,rec:t.rec};
+      const rows=[];for(let k=0;k<n;k++){const g=view(f,k*f.p,o),pen=Math.max(0,g.tilt-t.bmax)+Math.max(0,g.th-t.tmax);rows.push({g,ok:pen<1e-9,pen});}
+      const own=solve(f,t,o);return{i,name:nm(p,i),t,rows,own:own.k,ownFit:own.fit,ownTh:own.g.th};});
+    const common=[];for(let k=0;k<n;k++)if(P.every(q=>q.rows[k].ok))common.push(k);
+    let K,fit=common.length>0;
+    if(fit){K=common.reduce((b,k)=>P.reduce((s,q)=>s+q.rows[k].g.th,0)>P.reduce((s,q)=>s+q.rows[b].g.th,0)?k:b,common[0]);}
+    else{K=0;let bestV=1e9;for(let k=0;k<n;k++){const v=Math.max(...P.map(q=>q.rows[k].pen));if(v<bestV-1e-9){bestV=v;K=k;}}}
+    // seat assignment: highest priority nearest the centre, lowest at the ends
+    const s0=Math.floor((N-G)/2)+1,pos=[...Array(G).keys()].sort((a,b)=>Math.abs(a-(G-1)/2)-Math.abs(b-(G-1)/2)||b-a);
+    const order=[...P].sort((a,b)=>b.t.pri-a.t.pri||a.i-b.i);const seatOf={};order.forEach((q,j)=>{seatOf[q.i]=s0+pos[j];});const num={};[...P].sort((a,b)=>seatOf[a.i]-seatOf[b.i]).forEach((q,j)=>{num[q.i]=j+1;});
+    // outputs
+    const bay=false;$('g_row').textContent=LT[K];$('g_seats').textContent=G===1?String(s0):s0+'–'+(s0+G-1);
+    const ok=$('g_ok');ok.textContent=fit?'Yes':'No';ok.style.color=fit?'#1F7A1F':'#C00000';
+    let why='';
+    if(fit){const lim=P.filter(q=>q.own===Math.max(...P.map(z=>z.own)));const allSame=P.every(q=>q.own===K);
+      $('g_by').textContent=G===1?P[0].name:(allSame?'Everyone':list(lim.map(q=>q.name)));
+      const loser=P.reduce((a,b)=>(b.ownTh-b.rows[K].g.th)>(a.ownTh-a.rows[K].g.th)?b:a,P[0]),loss=loser.ownTh-loser.rows[K].g.th;
+      why=G===1?`Row ${LT[K]} is the first comfortable row for this viewer (${P[0].t.why}). It gives the biggest screen within that limit.`:allSame?`Row ${LT[K]} is the best row for every person in this group.`:
+        `Row ${LT[K]} is the first row where ${list(lim.map(q=>`${esc(q.name)} (${q.t.why})`))} ${lim.length>1?'are':'is'} comfortable. Moving back only reduces neck tilt and screen size, so everyone else stays within their limits here too.`+
+        (loss>0.05?` ${esc(loser.name)} gives up the most: ${loss.toFixed(1)}° of viewing angle compared with Row ${LT[loser.own]}.`:'');
+    }else{const bad=P.filter(q=>!q.rows[K].ok);$('g_by').textContent='Compromise';
+      why=`No single row suits everyone. Row ${LT[K]} is the closest compromise, but ${list(bad.map(q=>esc(q.name)))} ${bad.length>1?'are':'is'} still outside their limits there. A smaller-screen format would suit this group better.`;}
+    $('g_why').innerHTML=why;
+    const bk=common.filter(k=>k>K).slice(0,2),seatTxt=G===1?'seat '+s0:'seats '+s0+'–'+(s0+G-1);
+    $('g_backup').innerHTML=!fit?'':(bk.length?`<b>If ${G===1?'that seat is':'those seats are'} taken:</b> ${bk.map(k=>'Row '+LT[k]).join(' or ')}, ${seatTxt}, also ${G===1?'suits you':'keeps everyone within their limits'}. Rows further forward do not.`:`<b>If ${G===1?'that seat is':'those seats are'} taken:</b> Row ${LT[K]} is the back row, so try other seats in the same row.`);$('g_why').style.borderColor=fit?'#1F5FAD':'#C00000';
+    // seat map
+    const W=680,sw=Math.min(40,(W-80)/N),gap=Math.max(1.5,sw*0.14),AREA=24*15,rh=Math.min(40,AREA/n),top0=44,gx=(W-N*sw)/2;
+    let h=`<path d="M${gx},22 Q${W/2},6 ${gx+N*sw},22" fill="none" stroke="#000" stroke-width="2"/><text x="${W/2}" y="36" text-anchor="middle" font-size="11" fill="#595959">Screen</text>`;
+    const who={};P.forEach(q=>{who[seatOf[q.i]]=q;});
+    for(let k=0;k<n;k++){const y=top0+k*rh,hl=k===K,lc=hl?'#1F5FAD':'#595959',fw=hl?700:400,allOk=common.includes(k);
+      h+=`<text x="${gx-8}" y="${y+rh*0.5+4}" text-anchor="end" font-size="11" fill="${lc}" font-weight="${fw}">${LT[k]}</text><text x="${gx+N*sw+8}" y="${y+rh*0.5+4}" font-size="11" fill="${lc}" font-weight="${fw}">${LT[k]}</text>`;
+      for(let j=1;j<=N;j++){const x=gx+(j-1)*sw,q=hl?who[j]:null,col=q?'#1F5FAD':(allOk?'#BDD7EE':'#E4E4E4');
+        h+=`<rect x="${x+gap/2}" y="${y+1}" width="${sw-gap}" height="${rh-2.5}" rx="2" fill="${col}"><title>Row ${LT[k]}, seat ${j}${q?': '+esc(q.name):''}</title></rect>`;
+        if(q)h+=`<text x="${x+sw/2}" y="${y+rh/2+4}" text-anchor="middle" font-size="${sw>=26?11:10}" font-weight="700" fill="#fff" pointer-events="none">${num[q.i]}</text>`;}}
+    const yb=top0+n*rh+14;
+    h+=`<text x="${gx}" y="${yb}" font-size="11" fill="#595959">Seat 1</text><text x="${gx+N*sw}" y="${yb}" font-size="11" fill="#595959" text-anchor="end">${N}</text>`;
+    const m=$('gmap');m.setAttribute('viewBox',`0 0 ${W} ${44+AREA+20}`);m.innerHTML=h;
+    // dumbbell
+    const RH=30,T=26,H=T+G*RH+34,L=170,R=440,xs=k=>L+k*(R-L)/Math.max(1,n-1);
+    let d='';
+    for(let k=0;k<n;k+=Math.max(1,Math.round(n/9))){d+=`<line x1="${xs(k)}" x2="${xs(k)}" y1="${T-6}" y2="${T+G*RH}" stroke="#EDEDED"/><text x="${xs(k)}" y="${T+G*RH+16}" text-anchor="middle" font-size="11" fill="#000">${LT[k]}</text>`;}
+    d+=`<text x="${(L+R)/2}" y="${T+G*RH+30}" text-anchor="middle" font-size="11" fill="#595959">Row (front → back)</text>`;
+    d+=`<text x="465" y="${T-10}" font-size="11" font-weight="700" fill="#000">θ in group row</text><text x="560" y="${T-10}" font-size="11" font-weight="700" fill="#000">Neck tilt</text>`;
+    [...P].sort((a,b)=>seatOf[a.i]-seatOf[b.i]).forEach((q,j)=>{const y=T+j*RH+RH/2,g=q.rows[K].g,okq=q.rows[K].ok;
+      d+=`<circle cx="14" cy="${y}" r="9" fill="#1F5FAD"/><text x="14" y="${y+4}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${num[q.i]}</text>`;
+      d+=`<text x="${L-12}" y="${y+4}" text-anchor="end" font-size="12" fill="#000"><tspan font-weight="700">${esc(q.name)}</tspan><tspan fill="#595959"> · seat ${seatOf[q.i]}</tspan></text>`;
+      d+=`<line x1="${xs(q.own)}" x2="${xs(K)}" y1="${y}" y2="${y}" stroke="#BFBFBF" stroke-width="3"/>`;
+      d+=`<circle cx="${xs(q.own)}" cy="${y}" r="5" fill="${GR}"/><circle cx="${xs(K)}" cy="${y}" r="6" fill="${okq?BL:'#C00000'}" stroke="#fff" stroke-width="1.5"/>`;
+      const dl=g.th-q.ownTh;d+=`<text x="465" y="${y+4}" font-size="12" fill="#000">${g.th.toFixed(1)}°<tspan fill="#595959" font-size="11"> (${dl>=-0.05?'±0':dl.toFixed(1)})</tspan></text>`;
+      d+=`<text x="560" y="${y+4}" font-size="12" fill="${okq?'#000':'#C00000'}">${g.tilt.toFixed(1)}°${okq?'':' ✕'}</text>`;});
+    const db=$('gdb');db.setAttribute('viewBox',`0 0 680 ${H}`);db.innerHTML=d;
+  }
+  load(PRE[preset]);markPre(pnames.indexOf(preset));
+})();
+</script>
+</body>
+</html>
